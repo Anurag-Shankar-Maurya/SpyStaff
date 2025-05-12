@@ -11,9 +11,9 @@ mobileMenuBtn.addEventListener("click", () => {
 const header = document.getElementById("header");
 window.addEventListener("scroll", () => {
     if (window.scrollY > 50) {
-        header.classList.add("scrolled");
-    } else {
         header.classList.remove("scrolled");
+    } else {
+        header.classList.add("scrolled");
     }
 });
 
@@ -136,3 +136,33 @@ contactForm.addEventListener("submit", (e) => {
     // Reset form
     contactForm.reset();
 });
+
+// Theme Toggle
+const themeToggle = document.getElementById('themeToggle');
+const body = document.body;
+
+// Check for saved theme preference or system preference
+const savedTheme = localStorage.getItem('theme');
+const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+    body.classList.add('dark-theme');
+    updateIcons(true);
+}
+
+themeToggle.addEventListener('click', () => {
+    body.classList.toggle('dark-theme');
+    const isDark = body.classList.contains('dark-theme');
+    updateIcons(isDark);
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+});
+
+function updateIcons(isDark) {
+    const sunIcon = themeToggle.querySelector('.fa-sun');
+    const moonIcon = themeToggle.querySelector('.fa-moon');
+
+    if (sunIcon && moonIcon) {
+        sunIcon.style.display = isDark ? 'none' : 'inline';
+        moonIcon.style.display = isDark ? 'inline' : 'none';
+    }
+}

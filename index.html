@@ -13,7 +13,6 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="css/styles.css" />
-    <link rel="javascript" href="js/scripts.js" />
   </head>
 
   <body>
@@ -21,18 +20,23 @@
     <header id="header">
       <div class="container">
         <nav>
-          <a href="#" class="logo">
-            <i class="fas fa-shield-alt"></i>
+          <a href="#home" class="logo">
+            <!-- <i class="fas fa-shield-alt"></i> -->
+             <img src="images/SpyStaffLogo.svg" alt="SpyStaff Logo" height="50" width="50"/>
             SpyStaff
           </a>
           <div class="nav-links" id="navLinks">
             <a href="#features" class="nav-link">Features</a>
-            <a href="#benefits" class="nav-link">Benefits</a>
+            <!-- <a href="#benefits" class="nav-link">Benefits</a> -->
             <a href="#how-it-works" class="nav-link">How It Works</a>
-            <a href="#use-cases" class="nav-link">Use Cases</a>
+            <!-- <a href="#use-cases" class="nav-link">Use Cases</a> -->
             <a href="#pricing" class="nav-link">Pricing</a>
-            <a href="#testimonials" class="nav-link">Testimonials</a>
+            <!-- <a href="#testimonials" class="nav-link">Testimonials</a> -->
             <a href="#contact" class="nav-link">Contact</a>
+            <button class="theme-toggle" id="themeToggle" title="Toggle Theme">
+              <i class="fas fa-sun" style="display: inline"></i>
+              <i class="fas fa-moon" style="display: none"></i>
+            </button>
             <a href="#signup" class="cta-button">Get Started</a>
           </div>
           <button class="mobile-menu-btn" id="mobileMenuBtn">
@@ -420,19 +424,27 @@
         <div class="stats-container">
           <div class="stat-item fade-in">
             <div class="stat-number" id="stat1">5,000+</div>
-            <div class="stat-label">Active Companies</div>
+            <div class="stat-label" style="color: rgba(255, 255, 255, 0.8)">
+              Active Companies
+            </div>
           </div>
           <div class="stat-item fade-in" style="transition-delay: 0.2s">
             <div class="stat-number" id="stat2">25,000+</div>
-            <div class="stat-label">Employees Tracked</div>
+            <div class="stat-label" style="color: rgba(255, 255, 255, 0.8)">
+              Employees Tracked
+            </div>
           </div>
           <div class="stat-item fade-in" style="transition-delay: 0.4s">
             <div class="stat-number" id="stat3">98%</div>
-            <div class="stat-label">Customer Satisfaction</div>
+            <div class="stat-label" style="color: rgba(255, 255, 255, 0.8)">
+              Customer Satisfaction
+            </div>
           </div>
           <div class="stat-item fade-in" style="transition-delay: 0.6s">
             <div class="stat-number" id="stat4">35%</div>
-            <div class="stat-label">Average Productivity Increase</div>
+            <div class="stat-label" style="color: rgba(255, 255, 255, 0.8)">
+              Average Productivity Increase
+            </div>
           </div>
         </div>
       </div>
@@ -983,7 +995,7 @@
               </p>
             </div>
           </div>
-          <div class="team-member fade-in-left" style="transition-delay: 0.3s">
+          <div class="team-member fade-in-left" style="transition-delay: 0.6s">
             <div
               class="team-photo"
               style="
@@ -1308,6 +1320,6 @@
         </div>
       </div>
     </footer>
-    ̥
+    <script src="js/scripts.js"></script>
   </body>
 </html>
