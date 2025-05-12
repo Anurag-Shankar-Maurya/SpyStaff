@@ -1,0 +1,2581 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SpyStaff - Employee Tracking System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <style>
+        /* Base Styles */
+        :root {
+            --primary: #3b82f6;
+            --primary-dark: #1e40af;
+            --secondary: #1e3a8a;
+            --text-dark: #1f2937;
+            --text-light: #6b7280;
+            --white: #ffffff;
+            --off-white: #f9fafb;
+            --gray-light: #f3f4f6;
+            --gray: #e5e7eb;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        img {
+            max-width: 100%;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Header & Navigation */
+        header {
+            background-color: var(--white);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        header.scrolled {
+            padding: 0.5rem 0;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 0;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo i {
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--primary);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .cta-button {
+            background-color: var(--primary);
+            color: var(--white);
+            padding: 0.7rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 2px solid var(--primary);
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.25);
+        }
+
+        .cta-button:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .cta-button.outline {
+            background-color: transparent;
+            color: var(--off-white);
+        }
+
+        .cta-button.outline:hover {
+            background-color: var(--primary);
+            color: var(--white);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-dark);
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--white);
+            padding: 10rem 0 6rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -10%;
+            right: -10%;
+            width: 60%;
+            height: 70%;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -20%;
+            left: -10%;
+            width: 80%;
+            height: 70%;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .hero-content {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2.5rem;
+            opacity: 0.9;
+        }
+
+        .hero-cta {
+            display: inline-flex;
+            gap: 1rem;
+        }
+
+        .floating-elements {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .floating-element {
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+        }
+
+        .floating-element:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            top: 15%;
+            left: 10%;
+            animation-duration: 25s;
+        }
+
+        .floating-element:nth-child(2) {
+            width: 60px;
+            height: 60px;
+            top: 20%;
+            right: 20%;
+            animation-duration: 18s;
+            animation-delay: 2s;
+        }
+
+        .floating-element:nth-child(3) {
+            width: 40px;
+            height: 40px;
+            bottom: 30%;
+            left: 30%;
+            animation-duration: 20s;
+            animation-delay: 1s;
+        }
+
+        .floating-element:nth-child(4) {
+            width: 100px;
+            height: 100px;
+            bottom: 20%;
+            right: 10%;
+            animation-duration: 22s;
+            animation-delay: 3s;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+
+            25% {
+                transform: translate(10px, 20px) rotate(90deg);
+            }
+
+            50% {
+                transform: translate(20px, 0px) rotate(180deg);
+            }
+
+            75% {
+                transform: translate(10px, -20px) rotate(270deg);
+            }
+
+            100% {
+                transform: translate(0, 0) rotate(360deg);
+            }
+        }
+
+        /* Section Styles */
+        section {
+            padding: 6rem 0;
+        }
+
+        section.light {
+            background-color: var(--off-white);
+        }
+
+        section.dark {
+            background-color: var(--gray-light);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: var(--primary);
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Features Section */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background-color: var(--white);
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.4s ease;
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 0;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(30, 58, 138, 0.1));
+            z-index: -1;
+            transition: height 0.4s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-card:hover::before {
+            height: 100%;
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--primary);
+            color: var(--white);
+            border-radius: 50%;
+            font-size: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: rotateY(360deg);
+            background-color: var(--primary-dark);
+        }
+
+        .feature-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .feature-description {
+            color: var(--text-light);
+        }
+
+        /* How It Works Section */
+        .steps-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            position: relative;
+        }
+
+        .step-connector {
+            position: absolute;
+            top: 50px;
+            left: calc(16.67% + 25px);
+            width: calc(100% - 33.33% - 50px);
+            height: 3px;
+            background-color: var(--primary);
+            z-index: 0;
+        }
+
+        .step {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background-color: var(--primary);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0 auto 1.5rem;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .step:hover .step-number {
+            transform: scale(1.1);
+            box-shadow: 0 0 0 5px rgba(59, 130, 246, 0.3);
+        }
+
+        .step-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .step-description {
+            color: var(--text-light);
+        }
+
+        /* Pricing Section */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background-color: var(--white);
+            border-radius: 10px;
+            padding: 3rem 2rem;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pricing-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: height 0.3s ease;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .pricing-card:hover::before {
+            height: 10px;
+        }
+
+        .pricing-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .pricing-description {
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+            min-height: 80px;
+        }
+
+        .pricing-price {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 2rem;
+        }
+
+        /* Testimonials Section */
+        .testimonials-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .testimonial-card {
+            background-color: var(--white);
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .testimonial-text {
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-top: 1.5rem;
+        }
+
+        .testimonial-text::before {
+            content: '\201C';
+            position: absolute;
+            top: -10px;
+            left: -5px;
+            font-size: 4rem;
+            color: var(--primary);
+            opacity: 0.3;
+            line-height: 1;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .testimonial-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--gray);
+            overflow: hidden;
+        }
+
+        .testimonial-info h4 {
+            font-weight: 600;
+        }
+
+        .testimonial-info p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--white);
+            text-align: center;
+            padding: 5rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before,
+        .cta-section::after {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .cta-section::before {
+            top: -150px;
+            right: -100px;
+        }
+
+        .cta-section::after {
+            bottom: -150px;
+            left: -100px;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .cta-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-description {
+            font-size: 1.1rem;
+            margin-bottom: 2.5rem;
+            opacity: 0.9;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #1a202c;
+            color: var(--white);
+            padding: 4rem 0 2rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-column h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background-color: var(--primary);
+        }
+
+        .footer-column p {
+            color: #a0aec0;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-links a {
+            color: #a0aec0;
+            transition: color 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .footer-links a i {
+            margin-right: 0.5rem;
+            font-size: 0.8rem;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: # critères font-size: 0.9rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            background-color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        /* Animation Classes */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .fade-in.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .fade-in-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .fade-in-left.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .fade-in-right {
+            opacity: 0;
+            transform: translateX(50px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .fade-in-right.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .scale-in {
+            opacity: 0;
+            transform: scale(0.8);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .scale-in.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Benefits Section */
+        .benefits-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+        }
+
+        .benefit-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .benefit-icon {
+            width: 70px;
+            height: 70px;
+            background-color: rgba(59, 130, 246, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .benefit-item:hover .benefit-icon {
+            background-color: var(--primary);
+            color: var(--white);
+            transform: rotateY(180deg);
+        }
+
+        .benefit-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .benefit-description {
+            color: var(--text-light);
+        }
+
+        /* Stats Section */
+        .stats-section {
+            background: linear-gradient(rgba(30, 58, 138, 0.9), rgba(30, 58, 138, 0.9)), url('https://images.unsplash.com/photo-1497215842964-222b430dc094?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: var(--white);
+            text-align: center;
+            padding: 6rem 0;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .stat-item {
+            padding: 1.5rem;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(90deg, #ffffff, #a5b4fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* Use Cases Section */
+        .use-cases-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .use-case-card {
+            background-color: var(--white);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .use-case-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .use-case-image {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .use-case-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4));
+        }
+
+        .use-case-content {
+            padding: 2rem;
+        }
+
+        .use-case-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .use-case-description {
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+        }
+
+        /* FAQ Section */
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            margin-bottom: 1.5rem;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            background-color: var(--white);
+        }
+
+        .faq-question {
+            padding: 1.5rem;
+            background-color: var(--white);
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .faq-question:hover {
+            color: var(--primary);
+        }
+
+        .faq-question i {
+            transition: transform 0.3s ease;
+        }
+
+        .faq-answer {
+            padding: 0 1.5rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            color: var(--text-light);
+        }
+
+        .faq-item.active .faq-question {
+            color: var(--primary);
+        }
+
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+        }
+
+        .faq-item.active .faq-answer {
+            padding: 0 1.5rem 1.5rem;
+            max-height: 1000px;
+        }
+
+        /* Team Section */
+        .team-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .team-member {
+            background-color: var(--white);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .team-member:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .team-photo {
+            height: 250px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .team-photo::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.7));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .team-member:hover .team-photo::before {
+            opacity: 1;
+        }
+
+        .team-social {
+            position: absolute;
+            bottom: -50px;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            padding: 1rem 0;
+            transition: bottom 0.3s ease;
+            z-index: 1;
+        }
+
+        .team-member:hover .team-social {
+            bottom: 0;
+        }
+
+        .team-social-link {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background-color: var(--white);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .team-social-link:hover {
+            background-color: var(--primary);
+            color: var(--white);
+            transform: translateY(-3px);
+        }
+
+        .team-info {
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .team-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .team-position {
+            color: var(--primary);
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .team-bio {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* Blog Section */
+        .blog-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .blog-card {
+            background-color: var(--white);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .blog-image {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .blog-content {
+            padding: 2rem;
+        }
+
+        .blog-date {
+            color: var(--primary);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .blog-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .blog-card:hover .blog-title {
+            color: var(--primary);
+        }
+
+        .blog-excerpt {
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+        }
+
+        .blog-link {
+            color: var(--primary);
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: gap 0.3s ease;
+        }
+
+        .blog-link:hover {
+            gap: 0.8rem;
+        }
+
+        /* Contact Form Section */
+        .contact-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+            background-color: rgba(59, 130, 246, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: var(--primary);
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .contact-item:hover .contact-icon {
+            background-color: var(--primary);
+            color: var(--white);
+        }
+
+        .contact-text h4 {
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+
+        .contact-text p {
+            color: var(--text-light);
+        }
+
+        .contact-form {
+            background-color: var(--white);
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid var(--gray);
+            border-radius: 5px;
+            font-family: inherit;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        textarea.form-control {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .form-button {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 5px;
+            background-color: var(--primary);
+            color: var(--white);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .form-button:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-3px);
+        }
+
+        /* Partners Section */
+        .partners-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 3rem;
+        }
+
+        .partner-logo {
+            max-width: 150px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            filter: grayscale(100%);
+            opacity: 0.7;
+            transition: all 0.3s ease;
+        }
+
+        .partner-logo:hover {
+            filter: grayscale(0%);
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        .partner-logo img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+
+            .section-title {
+                font-size: 2.2rem;
+            }
+
+            .step-connector {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 70%;
+                height: 100vh;
+                background-color: var(--white);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                transition: right 0.3s ease;
+                box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+                z-index: 1000;
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+                z-index: 1001;
+            }
+
+            .mobile-menu-btn.active i::before {
+                content: '\f00d';
+            }
+
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .hero-cta {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .cta-title {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+
+            .feature-card,
+            .pricing-card,
+            .testimonial-card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header id="header">
+        <div class="container">
+            <nav>
+                <a href="#" class="logo">
+                    <i class="fas fa-shield-alt"></i>
+                    SpyStaff
+                </a>
+                <div class="nav-links" id="navLinks">
+                    <a href="#features" class="nav-link">Features</a>
+                    <a href="#benefits" class="nav-link">Benefits</a>
+                    <a href="#how-it-works" class="nav-link">How It Works</a>
+                    <a href="#use-cases" class="nav-link">Use Cases</a>
+                    <a href="#pricing" class="nav-link">Pricing</a>
+                    <a href="#testimonials" class="nav-link">Testimonials</a>
+                    <a href="#contact" class="nav-link">Contact</a>
+                    <a href="#signup" class="cta-button">Get Started</a>
+                </div>
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="floating-elements">
+            <div class="floating-element"></div>
+            <div class="floating-element"></div>
+            <div class="floating-element"></div>
+            <div class="floating-element"></div>
+        </div>
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="fade-in">Boost Productivity with SpyStaff</h1>
+                <p class="fade-in" style="transition-delay: 0.2s">
+                    The ultimate employee tracking system to monitor projects, manage
+                    payments, and optimize workforce efficiency with real-time insights.
+                </p>
+                <div class="hero-cta fade-in" style="transition-delay: 0.4s">
+                    <a href="#signup" class="cta-button">Try for Free</a>
+                    <a href="#features" class="cta-button outline">Learn More</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="light" id="features">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title fade-in">
+                    Powerful Features for Your Business
+                </h2>
+                <p class="section-subtitle fade-in">
+                    Discover how SpyStaff can transform your workforce management with
+                    these powerful tools.
+                </p>
+            </div>
+            <div class="features-grid">
+                <!-- Feature 1 -->
+                <div class="feature-card fade-in-left">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="feature-title">Real-Time Tracking</h3>
+                    <p class="feature-description">
+                        Monitor employee activity with live session tracking, screenshot
+                        capture, and popup code responses.
+                    </p>
+                </div>
+                <!-- Feature 2 -->
+                <div class="feature-card fade-in" style="transition-delay: 0.2s">
+                    <div class="feature-icon">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                    <h3 class="feature-title">Project Management</h3>
+                    <p class="feature-description">
+                        Create, assign, and track projects with progress charts and budget
+                        alerts.
+                    </p>
+                </div>
+                <!-- Feature 3 -->
+                <div class="feature-card fade-in-right" style="transition-delay: 0.4s">
+                    <div class="feature-icon">
+                        <i class="fas fa-credit-card"></i>
+                    </div>
+                    <h3 class="feature-title">Flexible Billing</h3>
+                    <p class="feature-description">
+                        Pay per minute or per storage, with customizable invoices and
+                        secure payments.
+                    </p>
+                </div>
+                <!-- Feature 4 -->
+                <div class="feature-card fade-in-left" style="transition-delay: 0.2s">
+                    <div class="feature-icon">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <h3 class="feature-title">Smart Notifications</h3>
+                    <p class="feature-description">
+                        Get instant alerts for important events, milestones, and potential
+                        issues.
+                    </p>
+                </div>
+                <!-- Feature 5 -->
+                <div class="feature-card fade-in" style="transition-delay: 0.4s">
+                    <div class="feature-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <h3 class="feature-title">Detailed Reports</h3>
+                    <p class="feature-description">
+                        Generate comprehensive reports on productivity, time usage, and
+                        project progress.
+                    </p>
+                </div>
+                <!-- Feature 6 -->
+                <div class="feature-card fade-in-right" style="transition-delay: 0.6s">
+                    <div class="feature-icon">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <h3 class="feature-title">Secure Access</h3>
+                    <p class="feature-description">
+                        Control who can view sensitive information with role-based
+                        permissions.
+                    </p>
+                </div>
+                <!-- Feature 7 -->
+                <div class="feature-card fade-in-left">
+                    <div class="feature-icon">
+                        <i class="fas fa-desktop"></i>
+                    </div>
+                    <h3 class="feature-title">Apps and Website Usage</h3>
+                    <p class="feature-description">
+                        Track which apps and websites your employees are using
+                        individually, as a team, or on a company level.
+                    </p>
+                </div>
+                <!-- Feature 8 -->
+                <div class="feature-card fade-in" style="transition-delay: 0.2s">
+                    <div class="feature-icon">
+                        <i class="fas fa-camera"></i>
+                    </div>
+                    <h3 class="feature-title">Screenshots</h3>
+                    <p class="feature-description">
+                        Get random screenshots, or those triggered by employees’
+                        suspicious or malicious activities.
+                    </p>
+                </div>
+                <!-- Feature 9 -->
+                <div class="feature-card fade-in-right" style="transition-delay: 0.4s">
+                    <div class="feature-icon">
+                        <i class="fas fa-history"></i>
+                    </div>
+                    <h3 class="feature-title">Activities Tracking</h3>
+                    <p class="feature-description">
+                        Look into your employees’ activity logs including active and idle
+                        time, or review and approve manual logs.
+                    </p>
+                </div>
+                <!-- Feature 10 -->
+                <div class="feature-card fade-in-left" style="transition-delay: 0.2s">
+                    <div class="feature-icon">
+                        <i class="fas fa-user-secret"></i>
+                    </div>
+                    <h3 class="feature-title">Stealth Mode</h3>
+                    <p class="feature-description">
+                        Prevent malicious behavior and identify suspicious activity to
+                        protect your team’s data.
+                    </p>
+                </div>
+                <!-- Feature 11 -->
+                <div class="feature-card fade-in" style="transition-delay: 0.4s">
+                    <div class="feature-icon">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <h3 class="feature-title">Real-Time Monitoring</h3>
+                    <p class="feature-description">
+                        See what your employees are up to anytime with live monitoring
+                        capabilities.
+                    </p>
+                </div>
+                <!-- Feature 12 -->
+                <div class="feature-card fade-in-right" style="transition-delay: 0.6s">
+                    <div class="feature-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3 class="feature-title">Manual Time Entries</h3>
+                    <p class="feature-description">
+                        Allow workers to add manual time entries for accurate time
+                        tracking.
+                    </p>
+                </div>
+                <!-- Feature 13 -->
+                <div class="feature-card fade-in-left">
+                    <div class="feature-icon">
+                        <i class="fas fa-tags"></i>
+                    </div>
+                    <h3 class="feature-title">Productivity Labeling</h3>
+                    <p class="feature-description">
+                        Label which apps and websites are productive to enhance
+                        performance analysis.
+                    </p>
+                </div>
+                <!-- Feature 14 -->
+                <div class="feature-card fade-in" style="transition-delay: 0.2s">
+                    <div class="feature-icon">
+                        <i class="fas fa-archive"></i>
+                    </div>
+                    <h3 class="feature-title">Timekeeping</h3>
+                    <p class="feature-description">
+                        Access historical data from up to two years ago for comprehensive
+                        analysis.
+                    </p>
+                </div>
+                <!-- Feature 15 -->
+                <div class="feature-card fade-in-right" style="transition-delay: 0.4s">
+                    <div class="feature-icon">
+                        <i class="fas fa-user-check"></i>
+                    </div>
+                    <h3 class="feature-title">Time and Attendance</h3>
+                    <p class="feature-description">
+                        Track employees’ attendance automatically for streamlined
+                        operations.
+                    </p>
+                </div>
+                <!-- Feature 16 -->
+                <div class="feature-card fade-in-left" style="transition-delay: 0.2s">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <h3 class="feature-title">Productivity Tracking</h3>
+                    <p class="feature-description">
+                        Analyze productivity through detailed reports to optimize
+                        workforce efficiency.
+                    </p>
+                </div>
+                <!-- Feature 17 -->
+                <div class="feature-card fade-in" style="transition-delay: 0.4s">
+                    <div class="feature-icon">
+                        <i class="fas fa-envelope-open-text"></i>
+                    </div>
+                    <h3 class="feature-title">Reports</h3>
+                    <p class="feature-description">
+                        Receive reports via email on a daily, weekly, or monthly basis.
+                    </p>
+                </div>
+                <!-- Feature 18 -->
+                <div class="feature-card fade-in-right" style="transition-delay: 0.6s">
+                    <div class="feature-icon">
+                        <i class="fas fa-camera-retro"></i>
+                    </div>
+                    <h3 class="feature-title">Manual Screenshots</h3>
+                    <p class="feature-description">
+                        Trigger screenshots manually for specific monitoring needs.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="dark" id="benefits">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title fade-in">Why Choose SpyStaff?</h2>
+                <p class="section-subtitle fade-in">
+                    Discover the key benefits that make SpyStaff the preferred choice
+                    for businesses worldwide.
+                </p>
+            </div>
+            <div class="benefits-container">
+                <div class="benefit-item fade-in">
+                    <div class="benefit-icon">
+                        <i class="fas fa-tachometer-alt"></i>
+                    </div>
+                    <h3 class="benefit-title">Increased Productivity</h3>
+                    <p class="benefit-description">
+                        Studies show that monitored employees are 22% more productive.
+                        SpyStaff helps teams stay focused and accountable.
+                    </p>
+                </div>
+                <div class="benefit-item fade-in" style="transition-delay: 0.2s">
+                    <div class="benefit-icon">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <h3 class="benefit-title">Cost Efficiency</h3>
+                    <p class="benefit-description">
+                        Reduce overhead costs by optimizing workforce allocation and
+                        eliminating time wastage.
+                    </p>
+                </div>
+                <div class="benefit-item fade-in" style="transition-delay: 0.4s">
+                    <div class="benefit-icon">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <h3 class="benefit-title">Data-Driven Decisions</h3>
+                    <p class="benefit-description">
+                        Make informed business decisions based on accurate performance
+                        metrics and analytics.
+                    </p>
+                </div>
+                <div class="benefit-item fade-in" style="transition-delay: 0.2s">
+                    <div class="benefit-icon">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <h3 class="benefit-title">Remote Work Management</h3>
+                    <p class="benefit-description">
+                        Effectively manage distributed teams across different locations
+                        and time zones.
+                    </p>
+                </div>
+                <div class="benefit-item fade-in" style="transition-delay: 0.4s">
+                    <div class="benefit-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="benefit-title">Enhanced Security</h3>
+                    <p class="benefit-description">
+                        Protect sensitive company data and ensure compliance with security
+                        protocols.
+                    </p>
+                </div>
+                <div class="benefit-item fade-in" style="transition-delay: 0.6s">
+                    <div class="benefit-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="benefit-title">Improved Team Collaboration</h3>
+                    <p class="benefit-description">
+                        Foster better communication and teamwork through transparent
+                        project tracking.
+                    </p>
+                </div>
+                <div class="benefit-item fade-in" style="transition-delay: 0.2s">
+                    <div class="benefit-icon">
+                        <i class="fas fa-sync-alt"></i>
+                    </div>
+                    <h3 class="benefit-title">Instant Data Syncing</h3>
+                    <p class="benefit-description">
+                        Get real-time data syncing for effective productivity monitoring
+                        across teams.
+                    </p>
+                </div>
+                <div class="benefit-item fade-in" style="transition-delay: 0.4s">
+                    <div class="benefit-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="benefit-title">Productivity Monitoring</h3>
+                    <p class="benefit-description">
+                        Access detailed productivity reports outlining hours worked, app
+                        usage, and performance trends.
+                    </p>
+                </div>
+                <div class="benefit-item fade-in" style="transition-delay: 0.6s">
+                    <div class="benefit-icon">
+                        <i class="fas fa-camera"></i>
+                    </div>
+                    <h3 class="benefit-title">Custom Screenshots</h3>
+                    <p class="benefit-description">
+                        Set up screenshots at custom intervals to ensure employees focus
+                        on work-related tasks.
+                    </p>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 2rem">
+                <a href="#contact" class="cta-button fade-in">Book a Demo</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="container">
+            <h2 class="section-title fade-in" style="color: white">
+                SpyStaff by the Numbers
+            </h2>
+            <p class="section-subtitle fade-in" style="color: rgba(255, 255, 255, 0.8)">
+                Join thousands of businesses that trust SpyStaff for their workforce
+                management needs.
+            </p>
+            <div class="stats-container">
+                <div class="stat-item fade-in">
+                    <div class="stat-number" id="stat1">5,000+</div>
+                    <div class="stat-label">Active Companies</div>
+                </div>
+                <div class="stat-item fade-in" style="transition-delay: 0.2s">
+                    <div class="stat-number" id="stat2">25,000+</div>
+                    <div class="stat-label">Employees Tracked</div>
+                </div>
+                <div class="stat-item fade-in" style="transition-delay: 0.4s">
+                    <div class="stat-number" id="stat3">98%</div>
+                    <div class="stat-label">Customer Satisfaction</div>
+                </div>
+                <div class="stat-item fade-in" style="transition-delay: 0.6s">
+                    <div class="stat-number" id="stat4">35%</div>
+                    <div class="stat-label">Average Productivity Increase</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="light" id="how-it-works">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title fade-in">How SpyStaff Works</h2>
+                <p class="section-subtitle fade-in">
+                    Get started with SpyStaff in three simple steps.
+                </p>
+            </div>
+            <div class="steps-container">
+                <div class="step-connector"></div>
+                <div class="step fade-in">
+                    <div class="step-number">1</div>
+                    <h3 class="step-title">Set Up Your Account</h3>
+                    <p class="step-description">
+                        Register your company, add payment details, and upload employment
+                        contracts.
+                    </p>
+                </div>
+                <div class="step fade-in" style="transition-delay: 0.2s">
+                    <div class="step-number">2</div>
+                    <h3 class="step-title">Invite Employees</h3>
+                    <p class="step-description">
+                        Send secure invitations for employees to create profiles and join
+                        projects.
+                    </p>
+                </div>
+                <div class="step fade-in" style="transition-delay: 0.4s">
+                    <div class="step-number">3</div>
+                    <h3 class="step-title">Track & Analyze</h3>
+                    <p class="step-description">
+                        Monitor activity, generate reports, and optimize performance with
+                        real-time data.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Use Cases Section -->
+    <section class="dark" id="use-cases">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title fade-in">SpyStaff in Action</h2>
+                <p class="section-subtitle fade-in">
+                    Discover how different industries leverage SpyStaff to optimize
+                    their operations.
+                </p>
+            </div>
+            <div class="use-cases-container">
+                <div class="use-case-card fade-in-left">
+                    <div class="use-case-image" style="
+                background-image: url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+              "></div>
+                    <div class="use-case-content">
+                        <h3 class="use-case-title">Software Development</h3>
+                        <p class="use-case-description">
+                            Track developer productivity, monitor code quality, and ensure
+                            project milestones are met on time.
+                        </p>
+                        agenda
+                        <a href="#" class="blog-link">Learn more <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                <div class="use-case-card fade-in" style="transition-delay: 0.2s">
+                    <div class="use-case-image" style="
+                background-image: url('https://images.unsplash.com/photo-1557804506-669a67965ba0?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+              "></div>
+                    <div class="use-case-content">
+                        <h3 class="use-case-title">Digital Marketing</h3>
+                        <p class="use-case-description">
+                            Monitor campaign performance, track creative work hours, and
+                            optimize resource allocation.
+                        </p>
+                        <a href="#" class="blog-link">Learn more <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                <div class="use-case-card fade-in-right" style="transition-delay: 0.4s">
+                    <div class="use-case-image" style="
+                background-image: url('https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+              "></div>
+                    <div class="use-case-content">
+                        <h3 class="use-case-title">Customer Support</h3>
+                        <p class="use-case-description">
+                            Track response times, monitor call quality, and ensure
+                            consistent customer service standards.
+                        </p>
+                        <a href="#" class="blog-link">Learn more <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Productivity Features Section -->
+    <section class="light" id="productivity-features">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title fade-in">
+                    Get the Most out of Your Employees’ Time
+                </h2>
+                <p class="section-subtitle fade-in">
+                    Discover exactly what your employees are up to every minute of the
+                    day with all-seeing software for workplace monitoring and complete
+                    behavior analytics.
+                </p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card fade-in-left">
+                    <div class="feature-icon">
+                        <i class="fas fa-desktop"></i>
+                    </div>
+                    <h3 class="feature-title">Company Computers</h3>
+                    <p class="feature-description">
+                        Suitable for office teams using company-owned computers. SpyStaff
+                        starts automatically, with options to track non-stop, during
+                        specific hours, or on specific networks.
+                    </p>
+                </div>
+                <div class="feature-card fade-in" style="transition-delay: 0.2s">
+                    <div class="feature-icon">
+                        <i class="fas fa-laptop"></i>
+                    </div>
+                    <h3 class="feature-title">Personal Computers</h3>
+                    <p class="feature-description">
+                        Ideal for remote teams, allowing employees to control tracking
+                        with clock in/out buttons for flexible monitoring.
+                    </p>
+                </div>
+                <div class="feature-card fade-in-right" style="transition-delay: 0.4s">
+                    <div class="feature-icon">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <h3 class="feature-title">Visible Mode</h3>
+                    <p class="feature-description">
+                        Promotes transparency by notifying employees when monitoring is
+                        active, ensuring trust and accountability.
+                    </p>
+                </div>
+                <div class="feature-card fade-in-left" style="transition-delay: 0.2s">
+                    <div class="feature-icon">
+                        <i class="fas fa-user-secret"></i>
+                    </div>
+                    <h3 class="feature-title">Stealth Mode</h3>
+                    <p class="feature-description">
+                        Detects suspicious activities discreetly to protect team data
+                        without employee awareness.
+                    </p>
+                </div>
+
+                <div class="feature-card fade-in" style="transition-delay: 0.4s">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="feature-title">Real-Time Alerts</h3>
+                    <p class="feature-description">
+                        Instant notifications on policy violations or anomalies to enable
+                        swift action.
+                    </p>
+                </div>
+
+                <div class="feature-card fade-in-right" style="transition-delay: 0.2s">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="feature-title">Activity Insights</h3>
+                    <p class="feature-description">
+                        Provides detailed analytics on user behavior to help improve
+                        security and productivity.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="light" id="pricing">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title fade-in">Simple, Transparent Pricing</h2>
+                <p class="section-subtitle fade-in">
+                    Choose the plan that works best for your business needs.
+                </p>
+            </div>
+            <div class="pricing-grid">
+                <!-- Pay Per Minute -->
+                <div class="pricing-card fade-in-left">
+                    <h3 class="pricing-title">Pay Per Minute</h3>
+                    <p class="pricing-description">
+                        Unlimited projects and employees. Only pay for active tracking
+                        time.
+                    </p>
+                    <div class="pricing-price">Custom Rate</div>
+                    <ul class="footer-links" style="margin-bottom: 2rem; text-align: left">
+                        <li>
+                            <i class="fas fa-check" style="color: var(--primary); margin-right: 0.5rem"></i>
+                            Real-time activity monitoring
+                        </li>
+                        <li>
+                            <i class="fas fa-check" style="color: var(--primary); margin-right: 0.5rem"></i>
+                            Screenshot capture
+                        </li>
+                        <li>
+                            <i class="fas fa-check" style="color: var(--primary); margin-right: 0.5rem"></i>
+                            Project time tracking
+                        </li>
+                        <li>
+                            <i class="fas fa-check" style="color: var(--primary); margin-right: 0.5rem"></i>
+                            Basic reporting
+                        </li>
+                    </ul>
+                    <a href="#signup" class="cta-button">Get Started</a>
+                </div>
+                <!-- Pay Per Storage -->
+                <div class="pricing-card fade-in-right" style="transition-delay: 0.2s">
+                    <h3 class="pricing-title">Pay Per Storage</h3>
+                    <p class="pricing-description">
+                        Store screenshots beyond the free period with flexible archiving
+                        options.
+                    </p>
+                    <div class="pricing-price">Custom Rate</div>
+                    <ul class="footer-links" style="margin-bottom: 2rem; text-align: left">
+                        <li>
+                            <i class="fas fa-check" style="color: var(--primary); margin-right: 0.5rem"></i>
+                            All Pay Per Minute features
+                        </li>
+                        <li>
+                            <i class="fas fa-check" style="color: var(--primary); margin-right: 0.5rem"></i>
+                            Extended data retention
+                        </li>
+                        <li>
+                            <i class="fas fa-check" style="color: var(--primary); margin-right: 0.5rem"></i>
+                            Advanced analytics
+                        </li>
+                        <li>
+                            <i class="fas fa-check" style="color: var(--primary); margin-right: 0.5rem"></i>
+                            API access
+                        </li>
+                    </ul>
+                    <a href="#signup" class="cta-button">Get Started</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="dark" id="testimonials">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title fade-in">What Our Users Say</h2>
+                <p class="section-subtitle fade-in">
+                    Don't just take our word for it. Here's what our customers have to
+                    say.
+                </p>
+            </div>
+            <div class="testimonials-container">
+                <div class="testimonial-card fade-in-left">
+                    <div class="testimonial-text">
+                        SpyStaff transformed how we manage our remote team. The real-time
+                        insights are invaluable!
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">
+                            <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Jane Doe" />
+                        </div>
+                        <div class="testimonial-info">
+                            <h4>Jane Doe</h4>
+                            <p>CEO, TechCorp</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card fade-in" style="transition-delay: 0.2s">
+                    <div class="testimonial-text">
+                        The project tracking and billing features saved us hours of manual
+                        work. Highly recommended!
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">
+                            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="John Smith" />
+                        </div>
+                        <div class="testimonial-info">
+                            <h4>John Smith</h4>
+                            <p>Project Manager, DevHub</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card fade-in-right" style="transition-delay: 0.4s">
+                    <div class="testimonial-text">
+                        Easy to set up and use. Our productivity has never been higher!
+                        The support team is also fantastic.
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">
+                            <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Emily Brown" />
+                        </div>
+                        <div class="testimonial-info">
+                            <h4>Emily Brown</h4>
+                            <p>HR Manager, CreativeInc</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="light" id="faq">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title fade-in">Frequently Asked Questions</h2>
+                <p class="section-subtitle fade-in">
+                    Find answers to common questions about SpyStaff.
+                </p>
+            </div>
+            <div class="faq-container">
+                <div class="faq-item fade-in">
+                    <div class="faq-question">
+                        Is SpyStaff legal to use?
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Yes, SpyStaff is legal to use in most jurisdictions when used
+                        properly. However, it's important to inform your employees about
+                        monitoring and follow local laws regarding workplace surveillance.
+                        We recommend consulting with legal counsel to ensure compliance
+                        with regulations in your region.
+                    </div>
+                </div>
+                <div class="faq-item fade-in" style="transition-delay: 0.1s">
+                    <div class="faq-question">
+                        How does the pricing work?
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        SpyStaff offers flexible pricing options. You can choose to pay
+                        per minute of active tracking or pay for storage of screenshots
+                        and data. Custom pricing is available based on your specific needs
+                        and team size. Contact our sales team for a personalized quote.
+                    </div>
+                </div>
+                <div class="faq-item fade-in" style="transition-delay: 0.2s">
+                    <div class="faq-question">
+                        Can employees see that they are being monitored?
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Yes, SpyStaff is designed to be transparent. Employees are
+                        notified when monitoring is active, and they can see when
+                        screenshots are taken. This transparency helps build trust while
+                        still providing the accountability benefits of monitoring.
+                    </div>
+                </div>
+                <div class="faq-item fade-in" style="transition-delay: 0.3s">
+                    <div class="faq-question">
+                        What kind of reports can I generate?
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        SpyStaff offers a wide range of reporting options, including
+                        productivity reports, time usage breakdowns, project progress
+                        tracking, and cost analysis. Reports can be customized to focus on
+                        specific teams, projects, or time periods, and can be exported in
+                        various formats.
+                    </div>
+                </div>
+                <div class="faq-item fade-in" style="transition-delay: 0.4s">
+                    <div class="faq-question">
+                        Is my data secure with SpyStaff?
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Absolutely. SpyStaff uses enterprise-grade encryption to protect
+                        your data both in transit and at rest. We follow industry best
+                        practices for security and regularly undergo security audits. Your
+                        data is stored in secure, redundant data centers with strict
+                        access controls.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="dark" id="team">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title fade-in">Meet Our Team</h2>
+                <p class="section-subtitle fade-in">
+                    The talented professionals behind SpyStaff's success and innovation.
+                </p>
+            </div>
+            <div class="team-container">
+                <div class="team-member fade-in-left">
+                    <div class="team-photo" style="
+                background-image: url('https://randomuser.me/api/portraits/men/75.jpg');
+              ">
+                        <div class="team-social">
+                            <a href="#" class="team-social-link"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="#" class="team-social-link"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="team-social-link"><i class="fab fa-github"></i></a>
+                        </div>
+                    </div>
+                    <div class="team-info">
+                        <h3 class="team-name">Michael Johnson</h3>
+                        <p class="team-position">CEO & Founder</p>
+                        <p class="team-bio">
+                            With over 15 years of experience in workforce management,
+                            Michael leads our vision for the future of employee tracking.
+                        </p>
+                    </div>
+                </div>
+                <div class="team-member fade-in" style="transition-delay: 0.2s">
+                    <div class="team-photo" style="
+                background-image: url('https://randomuser.me/api/portraits/women/63.jpg');
+              ">
+                        <div class="team-social">
+                            <a href="#" class="team-social-link"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="#" class="team-social-link"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="team-social-link"><i class="fab fa-dribbble"></i></a>
+                        </div>
+                    </div>
+                    <div class="team-info">
+                        <h3 class="team-name">Sarah Williams</h3>
+                        <p class="team-position">CTO</p>
+                        <p class="team-bio">
+                            Sarah oversees our technical strategy and ensures SpyStaff
+                            remains at the cutting edge of monitoring technology.
+                        </p>
+                    </div>
+                </div>
+                <div class="team-member fade-in-right" style="transition-delay: 0.4s">
+                    <div class="team-photo" style="
+                background-image: url('https://randomuser.me/api/portraits/men/32.jpg');
+              ">
+                        <div class="team-social">
+                            <a href="#" class="team-social-link"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="#" class="team-social-link"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="team-social-link"><i class="fab fa-medium-m"></i></a>
+                        </div>
+                    </div>
+                    <div class="team-info">
+                        <h3 class="team-name">David Chen</h3>
+                        <p class="team-position">Head of Product</p>
+                        <p class="team-bio">
+                            David leads our product development, focusing on creating
+                            intuitive and powerful features for our users.
+                        </p>
+                    </div>
+                </div>
+                <div class="team-member fade-in-left" style="transition-delay: 0.3s">
+                    <div class="team-photo" style="
+                background-image: url('https://randomuser.me/api/portraits/women/45.jpg');
+              ">
+                        <div class="team-social">
+                            <a href="#" class="team-social-link"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="#" class="team-social-link"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="team-social-link"><i class="fab fa-instagram"></i></a>
+                        </div>
+                    </div>
+                    <div class="team-info">
+                        <h3 class="team-name">Lisa Patel</h3>
+                        <p class="team-position">Head of Customer Success</p>
+                        <p class="team-bio">
+                            Lisa ensures our clients achieve maximum value from SpyStaff
+                            with dedicated support and training.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog Section -->
+    <section class="light" id="blog">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title fade-in">Latest Insights</h2>
+                <p class="section-subtitle fade-in">
+                    Stay updated with tips, trends, and best practices for workforce
+                    management.
+                </p>
+            </div>
+            <div class="blog-container">
+                <div class="blog-card fade-in-left">
+                    <div class="blog-image" style="
+                background-image: url('https://th.bing.com/th/id/R.c5f8d0c9e4591ea8c7d8e37315dc33ad?rik=BXFxCGdYuqRCgQ&riu=http%3a%2f%2fimages.unsplash.com%2fphoto-1606770347238-77fcfd29906c%3fcrop%3dentropy%26cs%3dtinysrgb%26fit%3dmax%26fm%3djpg%26ixid%3dMnwxMjA3fDB8MXxzZWFyY2h8Mnx8em9vbSUyMG1lZXRpbmd8fDB8fHx8MTYzMDg5OTc5Ng%26ixlib%3drb-1.2.1%26q%3d80%26w%3d1080&ehk=ZVHmEHQe2gpRz7%2fTZxnIEPyfrkY%2fBd4YA6QIVPA39uU%3d&risl=&pid=ImgRaw&r=0');
+              "></div>
+                    <div class="blog-content">
+                        <div class="blog-date">October 20, 2025</div>
+                        <h3 class="blog-title">
+                            5 Ways to Boost Remote Team Productivity
+                        </h3>
+                        <p class="blog-excerpt">
+                            Discover proven strategies to keep your remote workforce engaged
+                            and efficient using SpyStaff.
+                        </p>
+                        <a href="#" class="blog-link">Read More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                <div class="blog-card fade-in" style="transition-delay: 0.2s">
+                    <div class="blog-image" style="
+                background-image: url('https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+              "></div>
+                    <div class="blog-content">
+                        <div class="blog-date">October 15, 2025</div>
+                        <h3 class="blog-title">The Future of Employee Monitoring</h3>
+                        <p class="blog-excerpt">
+                            Explore how AI and analytics are shaping the next generation of
+                            workforce management tools.
+                        </p>
+                        <a href="#" class="blog-link">Read More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                <div class="blog-card fade-in-right" style="transition-delay: 0.4s">
+                    <div class="blog-image" style="
+                background-image: url('https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+              "></div>
+                    <div class="blog-content">
+                        <div class="blog-date">October 10, 2025</div>
+                        <h3 class="blog-title">How to Ensure Compliance in Monitoring</h3>
+                        <p class="blog-excerpt">
+                            Learn best practices for implementing employee tracking while
+                            respecting privacy laws.
+                        </p>
+                        <a href="#" class="blog-link">Read More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="dark" id="contact">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title fade-in">Get in Touch</h2>
+                <p class="section-subtitle fade-in">
+                    Have questions or need a demo? We're here to help!
+                </p>
+            </div>
+            <div class="contact-container">
+                <div class="contact-info fade-in-left">
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="contact-text">
+                            <h4>Our Office</h4>
+                            <p>
+                                123 Productivity Lane, Suite 100<br />San Francisco, CA 94105
+                            </p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone-alt"></i>
+                        </div>
+                        <div class="contact-text">
+                            <h4>Phone</h4>
+                            <p>+1 (800) 555-1234</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="contact-text">
+                            <h4>Email</h4>
+                            <p>support@spystaff.com</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="contact-form fade-in-right">
+                    <form>
+                        <div class="form-group">
+                            <label for="name" class="form-label">Full Name</label>
+                            <input type="text" id="name" class="form-control" placeholder="John Doe" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="email" class="form-label">Email Address</label>
+                            <input type="email" id="email" class="form-control" placeholder="john@example.com"
+                                required />
+                        </div>
+                        <div class="form-group">
+                            <label for="message" class="form-label">Message</label>
+                            <textarea id="message" class="form-control" placeholder="How can we help you?"
+                                required></textarea>
+                        </div>
+                        <button type="submit" class="form-button">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Partners Section -->
+    <section class="light" id="partners">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title fade-in">Trusted by Industry Leaders</h2>
+                <p class="section-subtitle fade-in">
+                    We partner with top companies to deliver exceptional workforce
+                    solutions.
+                </p>
+            </div>
+            <div class="partners-container">
+                <div class="partner-logo fade-in">
+                    <img src="https://via.placeholder.com/150x80.png?text=Partner+1" alt="Partner 1" />
+                </div>
+                <div class="partner-logo fade-in" style="transition-delay: 0.2s">
+                    <img src="https://via.placeholder.com/150x80.png?text=Partner+2" alt="Partner 2" />
+                </div>
+                <div class="partner-logo fade-in" style="transition-delay: 0.4s">
+                    <img src="https://via.placeholder.com/150x80.png?text=Partner+3" alt="Partner 3" />
+                </div>
+                <div class="partner-logo fade-in" style="transition-delay: 0.6s">
+                    <img src="https://via.placeholder.com/150x80.png?text=Partner+4" alt="Partner 4" />
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" id="signup">
+        <div class="container">
+            <div class="cta-content">
+                <h2 class="cta-title fade-in">Ready to Transform Your Workforce?</h2>
+                <p class="cta-description fade-in">
+                    Join thousands of businesses optimizing their teams with SpyStaff.
+                    Start your free trial today!
+                </p>
+                <a href="#signup" class="cta-button fade-in" style="transition-delay: 0.2s">Get Started Now</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h3>About SpyStaff</h3>
+                    <p>
+                        SpyStaff is the leading employee tracking system designed to boost
+                        productivity and streamline workforce management.
+                    </p>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li>
+                            <a href="#features"><i class="fas fa-chevron-right"></i> Features</a>
+                        </li>
+                        <li>
+                            <a href="#benefits"><i class="fas fa-chevron-right"></i> Benefits</a>
+                        </li>
+                        <li>
+                            <a href="#pricing"><i class="fas fa-chevron-right"></i> Pricing</a>
+                        </li>
+                        <li>
+                            <a href="#contact"><i class="fas fa-chevron-right"></i> Contact</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Resources</h3>
+                    <ul class="footer-links">
+                        <li>
+                            <a href="#blog"><i class="fas fa-chevron-right"></i> Blog</a>
+                        </li>
+                        <li>
+                            <a href="#faq"><i class="fas fa-chevron-right"></i> FAQ</a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fas fa-chevron-right"></i> Support</a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fas fa-chevron-right"></i> Privacy Policy</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact Us</h3>
+                    <p><i class="fas fa-envelope"></i> support@spystaff.com</p>
+                    <p><i class="fas fa-phone-alt"></i> +1 (800) 555-1234</p>
+                    <p>
+                        <i class="fas fa-map-marker-alt"></i> 123 Productivity Lane, San
+                        Francisco, CA
+                    </p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 SpyStaff. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+        const navLinks = document.getElementById("navLinks");
+
+        mobileMenuBtn.addEventListener("click", () => {
+            navLinks.classList.toggle("active");
+            mobileMenuBtn.classList.toggle("active");
+        });
+
+        // Header Scroll Effect
+        const header = document.getElementById("header");
+        window.addEventListener("scroll", () => {
+            if (window.scrollY > 50) {
+                header.classList.add("scrolled");
+            } else {
+                header.classList.remove("scrolled");
+            }
+        });
+
+        // Scroll Animations
+        const fadeInElements = document.querySelectorAll(
+            ".fade-in, .fade-in-left, .fade-in-right, .scale-in"
+        );
+
+        const observerOptions = {
+            root: null,
+            rootMargin: "0px",
+            threshold: 0.1,
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("active");
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        fadeInElements.forEach((element) => {
+            observer.observe(element);
+        });
+
+        // FAQ Accordion
+        // const faqItems = document.querySelectorAll(".faq-item");
+
+        // faqItems.forEach((item) => {
+        //     const question = item.querySelector(".faq-question");
+        //     question.addEventListener("click", () => {
+        //         const isActive = item.classList.contains("active");
+
+        //         // Close all other FAQ items
+        //         faqItems.forEach((i) => {
+        //             if (i !== item) {
+        //                 i.classList.remove("active");
+        //             }
+        //         });
+
+        //         // Toggle current FAQ item
+        //         item.classList.toggle("active", !isActive);
+        //     });
+        // });
+
+        // Smooth Scroll for Anchor Links
+        document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+            anchor.addEventListener("click", function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute("href");
+                const targetElement = document.querySelector(targetId);
+
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: "smooth",
+                    });
+
+                    // Close mobile menu if open
+                    navLinks.classList.remove("active");
+                    mobileMenuBtn.classList.remove("active");
+                }
+            });
+        });
+
+        // Stats Counter Animation
+        const statNumbers = document.querySelectorAll(".stat-number");
+        let statsAnimated = false;
+
+        const animateStats = () => {
+            statNumbers.forEach((stat) => {
+                const target = parseInt(stat.textContent.replace(/[^0-9]/g, ""));
+                let current = 0;
+                const increment = target / 100;
+
+                const updateCounter = () => {
+                    current += increment;
+                    if (current >= target) {
+                        stat.textContent = stat.textContent.replace(
+                            /[0-9,]+/,
+                            target.toLocaleString()
+                        );
+                        return;
+                    }
+                    stat.textContent = stat.textContent.replace(
+                        /[0-9,]+/,
+                        Math.floor(current).toLocaleString()
+                    );
+                    requestAnimationFrame(updateCounter);
+                };
+
+                updateCounter();
+            });
+        };
+
+        const statsSection = document.querySelector(".stats-section");
+        const statsObserver = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting && !statsAnimated) {
+                animateStats();
+                statsAnimated = true;
+            }
+        }, observerOptions);
+
+        statsObserver.observe(statsSection);
+
+        // Form Submission Handling (Placeholder)
+        const contactForm = document.querySelector(".contact-form form");
+        contactForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const name = document.getElementById("name").value;
+            const email = document.getElementById("email").value;
+            const message = document.getElementById("message").value;
+
+            // Placeholder for form submission logic
+            console.log("Form submitted:", { name, email, message });
+            alert("Thank you for your message! We will get back to you soon.");
+
+            // Reset form
+            contactForm.reset();
+        });
+    </script>
+</body>
+
+</html>
